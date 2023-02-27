@@ -43,7 +43,7 @@ export const runningApp = async () => {
   app.use(cors(corsOptions));
   app.use(
     cookieParser("your-secret-key", {
-      domain: ".simple-project-123.netlify.app",
+      domain: "simple-project-123.netlify.app",
     })
   );
   app.use(logger("dev"));
