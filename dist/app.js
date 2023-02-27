@@ -56,11 +56,11 @@ const runningApp = () => __awaiter(void 0, void 0, void 0, function* () {
     app.set("view engine", "pug");
     app.use(express_1.default.static("../../public"));
     app.use(express_1.default.urlencoded({
-        limit: "5000mb",
+        limit: "50mb",
         extended: true,
         parameterLimit: 500000,
     }));
-    app.use(express_1.default.json({ limit: "5000mb" }));
+    app.use(express_1.default.json({ limit: "50mb" }));
     app.use((0, cors_1.default)(cors_config_1.corsOptions));
     app.use((0, cookie_parser_1.default)());
     app.use((0, morgan_1.default)("dev"));

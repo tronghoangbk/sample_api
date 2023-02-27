@@ -18,7 +18,7 @@ const gẹtJokeController = (req, res) => __awaiter(void 0, void 0, void 0, func
     const joke = yield joke_model_1.default.aggregate([{ $sample: { size: 1 } }]);
     const seenJokes = req.cookies.seenJokes || [];
     const unseenJokes = yield joke_model_1.default.find({ _id: { $nin: seenJokes } });
-    if (unseenJokes.length !== 0) {
+    if (unseenJokes.length === 0) {
         res.send({
             message: "That's all the jokes for today! Come back another day!",
         });
