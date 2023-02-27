@@ -6,7 +6,7 @@ const gẹtJokeController = async (req: Request, res: Response) => {
   const seenJokes = req.cookies.seenJokes || [];
   const unseenJokes = await Joke.find({ _id: { $nin: seenJokes } });
 
-  if (unseenJokes.length !== 0) {
+  if (unseenJokes.length === 0) {
     res.send({
       message: "That's all the jokes for today! Come back another day!",
     });

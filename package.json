@@ -40,7 +40,6 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^14.2.0",
-    "ethers": "^5.5.4",
     "express": "^4.17.2",
     "mongoose": "^6.1.7",
     "morgan": "^1.9.1",

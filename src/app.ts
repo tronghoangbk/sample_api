@@ -21,6 +21,7 @@ const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 
+
 export const runningApp = async () => {
   await connectDB();
   app.set("port", port);
@@ -29,12 +30,12 @@ export const runningApp = async () => {
   app.use(express.static("../../public"));
   app.use(
     express.urlencoded({
-      limit: "5000mb",
+      limit: "50mb",
       extended: true,
       parameterLimit: 500000,
     })
   );
-  app.use(express.json({ limit: "5000mb" }));
+  app.use(express.json({ limit: "50mb" }));
   app.use(cors(corsOptions));
   app.use(cookieParser());
   app.use(logger("dev"));
