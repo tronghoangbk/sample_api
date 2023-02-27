@@ -16,6 +16,7 @@ const gẹtJokeController = async (req: Request, res: Response) => {
     res.cookie("seenJokes", seenJokes.concat(nextJoke._id), {
       httpOnly: true,
       maxAge: 86400000, // 1 day
+      domain: ".simple-project-123.netlify.app",
     });
     res.send(nextJoke);
   }

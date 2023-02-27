@@ -27,7 +27,8 @@ const gẹtJokeController = (req, res) => __awaiter(void 0, void 0, void 0, func
         const nextJoke = unseenJokes[Math.floor(Math.random() * unseenJokes.length)];
         res.cookie("seenJokes", seenJokes.concat(nextJoke._id), {
             httpOnly: true,
-            maxAge: 86400000, // 1 day
+            maxAge: 86400000,
+            domain: ".simple-project-123.netlify.app",
         });
         res.send(nextJoke);
     }
