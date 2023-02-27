@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Upload</title>
+</head>
+<body>
+    <h1>Test upload</h1>
+    <div id = "uploadForm">
+        <input id = "cloudPath" type = "text" placeholder="Path here"> 
+        <input type="file" id="files" name="files[]" multiple><br><br>
+        <button id="btn" type="button">Submit</button><br><br>
+        <label for="progress">Upload progress:</label>
+        <progress id="progress" value="0" max="100"> 0% </progress>
+        <h4>status: <span id = "status">  </span></h4>
+    </div>
+</body>
+
+<script>
+    const button = document.getElementById("btn");
+    const cloudPath = document.getElementById("cloudPath");
+    const files = document.getElementById("files");
+    const progress = document.getElementById("progress");
+    const status = document.getElementById("status");
+    const formData = new FormData();
+    let interval;
+
+    button.addEventListener("click", async (event) => {
+        const msg = checkUpload();
+        if(msg){
+            status.style.color = "red";
+            status.innerHTML = msg;
+        }
+        else{
+            await upload();
+        }
+    })
+
+    const runProgress = () => {
+        progress.value = 0;
+        interval = setInterval(() => {
+            if(progress.value < 96){
+                progress.value += 0.3;
+            }
+        },10);
+    }
+
+    const upload = async () => {
+        status.style.color = "green";
+        status.innerHTML = "Uploading...";
+        formData.append("cloudPath", cloudPath.value);
+        for(let i = 0; i < files.files.length; i++){
+            formData.append(`file${i}`, files.files[i]);
+        }
+        runProgress();
+        try {
+            const result = await axios.post('http://192.168.0.46:8080/admin/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+         })
+         progress.value = 100;
+         status.style.color = "green";
+         status.innerHTML = result.data;
+        } catch (error) {
+            status.style.color = "red";
+            clearInterval(interval);
+            status.innerHTML = "Upload failed";
+        } 
+    }
+
+    const checkUpload = () => {
+        let msg = "";
+        if(!cloudPath.value){
+            msg = "Missing cloud path";
+        }
+        if(files.files.length === 0){
+            msg = "Please choose file";
+        }
+        return msg;
+    }
+    
+</script>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 30%;
+        left: 40%;
+    }
+    #uploadForm{
+        border: solid 1px;
+        padding: 15px;
+        font-size: x-large;
+        border-radius: 5%;
+    }
+    #btn{
+        background-color: rgb(103, 202, 103);
+        font-size: 22px;
+        border: solid 1px;
+        border-radius: 10% 10% 10% 10%;
+    }
+    #btn:hover{
+        background-color: rgb(41, 112, 41);
+    }
+</style>
+</html>

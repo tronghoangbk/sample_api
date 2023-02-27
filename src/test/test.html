@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaSpacecy</title>
+</head>
+<body>
+  <h1>Hello</h1>
+  <div id="table">
+
+  </div>
+</body>
+<script>
+  for(let i = 0; i < 1000; i++){
+    var turnX = true;
+    var turnO = false;
+
+    const div = document.createElement("div")
+    div.className = "box";
+    div.id = i;
+
+    const table = document.getElementById("table");
+    table.appendChild(div);
+
+    const divX = document.createElement("div");
+    divX.className = "divX";
+    divX.innerHTML = "X"
+
+    const divO = document.createElement("div");
+    divO.className = "divO";
+    divO.innerHTML = "O"
+
+    div.addEventListener("click", () => {
+      const x = parseInt(div.id / 32);
+      const y = div.id % 32;
+      console.log(x,y)
+      checkAndSwapTurn();
+      checkWin(x,y);
+    })
+
+    const checkAndSwapTurn = () => {
+      if(!div.innerHTML){
+          if(turnX){
+          div.appendChild(divX);
+        }
+        else{
+          div.appendChild(divO);
+        }
+        turnX = !turnX;
+        turnO = !turnO;
+      }
+    }
+
+    const getIndex = (curX, curY) => {
+      const index = 32 * curX + curY;
+      return index;
+    }
+
+    const checkWin = (curX, curY) => {
+      const kernel1 = [{x: 0, y: 0}, {x: -1, y: -1}, {x: -2, y: -2}, {x: -3, y: -3}, {x: -4, y: -4}];
+      const kernel2 = [{x: 0, y: 0}, {x: 0, y: -1}, {x: 0, y: -2}, {x: 0, y: -3}, {x: 0, y: -4}];
+      const kernel3 = [{x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 2}, {x: 0, y: 3}, {x: 0, y: 4}];
+      const kernel4 = [{x: 0, y: 0}, {x: -1, y: 0}, {x: -2, y: 0}, {x: -3, y: 0}, {x: -4, y: 0}];
+      const kernel5 = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}, {x: 4, y: 0}];
+      const kernel6 = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}, {x: 4, y: 0}];
+
+      const kernel = [kernel1, kernel2, kernel3, kernel4, kernel5];
+      kernel.map((k) => {
+        const arr = [];
+        k.map((element) => {
+          const tmpX = curX + element.x;
+          const tmpY = curY + element.y;
+          const index = getIndex(tmpX,tmpY);
+          const el = document.getElementById(`${index}`).textContent;
+          arr.push(el);
+        })
+        console.log(arr)
+        const a = arr.filter(e => e === "X")
+        const b = arr.filter(e => e === "O")
+        const result1 = a.length === 5 ? true: false;
+        const result2 = b.length === 5 ? true: false;
+        if(result1){
+          alert(`X da thang`)
+        } else if(result2){
+          alert(`O da thang`)
+        }
+      })
+     
+    }
+  }
+</script>
+<style>
+  #table{
+    border: 1px solid;
+    height: 1000px;
+    width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .box{
+    border: 1px solid;
+    height: 48px;
+    width: 48px;
+    position: relative;
+  }
+  .divX{
+    margin: auto;
+    position: absolute;
+    top:-8%;
+    left: 14%;
+    font-size: 50px;
+    color: blue;
+  }
+  .divO{
+    margin: auto;
+    position: absolute;
+    top:-8%;
+    left: 14%;
+    font-size: 50px;
+    color: red;
+  }
+</style>
+</html>
