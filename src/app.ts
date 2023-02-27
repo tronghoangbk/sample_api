@@ -15,12 +15,16 @@ import http from "http";
 
 (<any>process.env.UV_THREADPOOL_SIZE) = os.cpus().length;
 
+declare module "cookie-parser" {
+  interface CookieParseOptions {
+    domain?: string;
+  }
+}
 const app = express();
 
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
-
 
 export const runningApp = async () => {
   await connectDB();
@@ -37,7 +41,11 @@ export const runningApp = async () => {
   );
   app.use(express.json({ limit: "50mb" }));
   app.use(cors(corsOptions));
-  app.use(cookieParser());
+  app.use(
+    cookieParser("your-secret-key", {
+      domain: ".simple-project-123.netlify.app",
+    })
+  );
   app.use(logger("dev"));
 
   app.use("/", APIRouter);

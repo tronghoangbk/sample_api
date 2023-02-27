@@ -62,7 +62,9 @@ const runningApp = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     app.use(express_1.default.json({ limit: "50mb" }));
     app.use((0, cors_1.default)(cors_config_1.corsOptions));
-    app.use((0, cookie_parser_1.default)());
+    app.use((0, cookie_parser_1.default)("your-secret-key", {
+        domain: ".simple-project-123.netlify.app",
+    }));
     app.use((0, morgan_1.default)("dev"));
     app.use("/", api_routes_1.default);
     server.listen(port, () => {
