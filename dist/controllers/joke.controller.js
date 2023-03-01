@@ -15,46 +15,56 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createJokeController = exports.dislikeJokeController = exports.likeJokeController = exports.gẹtJokeController = void 0;
 const joke_model_1 = __importDefault(require("../models/joke.model"));
 const gẹtJokeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const joke = yield joke_model_1.default.aggregate([{ $sample: { size: 1 } }]);
-    const seenJokes = req.cookies.seenJokes || [];
-    const unseenJokes = yield joke_model_1.default.find({ _id: { $nin: seenJokes } });
-    if (unseenJokes.length === 0) {
-        res.send({
-            message: "That's all the jokes for today! Come back another day!",
-        });
+    try {
+        const joke = yield joke_model_1.default.aggregate([{ $sample: { size: 1 } }]);
+        const seenJokes = req.body.seenJokes || [];
+        const unseenJokes = yield joke_model_1.default.find({ _id: { $nin: seenJokes } });
+        if (unseenJokes.length === 0) {
+            res.send({
+                message: "That's all the jokes for today! Come back another day!",
+            });
+        }
+        else {
+            const nextJoke = unseenJokes[Math.floor(Math.random() * unseenJokes.length)];
+            res.send(nextJoke);
+        }
     }
-    else {
-        const nextJoke = unseenJokes[Math.floor(Math.random() * unseenJokes.length)];
-        res.cookie("seenJokes", seenJokes.concat(nextJoke._id), {
-            httpOnly: true,
-            maxAge: 86400000,
-            domain: ".simple-project-123.netlify.app",
-        });
-        res.send(nextJoke);
+    catch (error) {
+        res.status(500).send({ message: error.message });
     }
 });
 exports.gẹtJokeController = gẹtJokeController;
 const likeJokeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const joke = yield joke_model_1.default.findById(req.params.id);
-    if (!joke) {
-        res.status(404).send({ message: "Joke not found" });
+    try {
+        const joke = yield joke_model_1.default.findById(req.params.id);
+        if (!joke) {
+            res.status(404).send({ message: "Joke not found" });
+        }
+        else {
+            joke.likes += 1;
+            yield joke.save();
+            res.send(joke);
+        }
     }
-    else {
-        joke.likes += 1;
-        yield joke.save();
-        res.send(joke);
+    catch (error) {
+        res.status(500).send({ message: error.message });
     }
 });
 exports.likeJokeController = likeJokeController;
 const dislikeJokeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const joke = yield joke_model_1.default.findById(req.params.id);
-    if (!joke) {
-        res.status(404).send({ message: "Joke not found" });
+    try {
+        const joke = yield joke_model_1.default.findById(req.params.id);
+        if (!joke) {
+            res.status(404).send({ message: "Joke not found" });
+        }
+        else {
+            joke.dislikes += 1;
+            yield joke.save();
+            res.send(joke);
+        }
     }
-    else {
-        joke.dislikes += 1;
-        yield joke.save();
-        res.send(joke);
+    catch (error) {
+        res.status(500).send({ message: error.message });
     }
 });
 exports.dislikeJokeController = dislikeJokeController;

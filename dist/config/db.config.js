@@ -13,13 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDB = void 0;
-const { MONGODB_URL } = process.env;
+const { MONGO_URI } = process.env;
 const mongoose_1 = __importDefault(require("mongoose"));
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const promise = () => __awaiter(void 0, void 0, void 0, function* () {
             return new Promise((resolve, rejects) => {
-                mongoose_1.default.connect(`${MONGODB_URL}`, error => {
+                mongoose_1.default.connect(`${MONGO_URI}`, error => {
                     if (error) {
                         rejects(error);
                     }
