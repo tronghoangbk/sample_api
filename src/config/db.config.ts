@@ -1,4 +1,4 @@
-const { MONGODB_URL } = process.env;
+const { MONGO_URI } = process.env;
 
 import mongoose from "mongoose";
 const connectDB = async () => {
@@ -6,7 +6,7 @@ const connectDB = async () => {
 		const promise = async () => {
 			return new Promise((resolve: any, rejects: any) => {
 				mongoose.connect(
-					`${MONGODB_URL}`,
+					`${MONGO_URI}`,
 					error => {
 						if (error) {
 							rejects(error);

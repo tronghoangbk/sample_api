@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 //use the cookie-parser
 import cookieParser from "cookie-parser";
-
 import { connectDB } from "./config/db.config";
 import * as path from "path";
 import logger from "morgan";
@@ -15,11 +14,6 @@ import http from "http";
 
 (<any>process.env.UV_THREADPOOL_SIZE) = os.cpus().length;
 
-declare module "cookie-parser" {
-  interface CookieParseOptions {
-    domain?: string;
-  }
-}
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -41,11 +35,7 @@ export const runningApp = async () => {
   );
   app.use(express.json({ limit: "50mb" }));
   app.use(cors(corsOptions));
-  app.use(
-    cookieParser("your-secret-key", {
-      domain: "simple-project-123.netlify.app",
-    })
-  );
+  app.use(cookieParser());
   app.use(logger("dev"));
 
   app.use("/", APIRouter);

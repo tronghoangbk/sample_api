@@ -10,7 +10,7 @@ const JokeRouter = express.Router();
 
 // JokeRouter.post("/create", createJokeController);
 
-JokeRouter.get("/", gẹtJokeController);
+JokeRouter.post("/", gẹtJokeController);
 
 JokeRouter.post("/like/:id", likeJokeController);
 
